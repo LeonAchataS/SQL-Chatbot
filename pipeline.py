@@ -80,10 +80,11 @@ def create_property_search_graph():
         route_after_check_completion,
         {
             "ask_missing_filter": "ask_missing_filter",
-            "ask_additional_filters": "ask_additional_filters"
+            "ask_additional_filters": "ask_additional_filters",
+            "collect_optional_filters": "collect_optional_filters"
         }
     )
-    
+        
     # Router 2: Después de collect_optional_filters
     # Decide si extrae más filtros o genera SQL
     workflow.add_conditional_edges(

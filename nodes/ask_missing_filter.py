@@ -18,6 +18,7 @@ def ask_missing_filter_node(state: AgentState) -> AgentState:
     Returns:
         Estado actualizado con pregunta generada
     """
+    print(state)
     print(f"\n{'='*60}")
     print(f"❓ ASK MISSING FILTER NODE")
     print(f"{'='*60}")

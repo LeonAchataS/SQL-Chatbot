@@ -1,3 +1,4 @@
 .env
 example.py
 /__pycache__/
+generar_depas.py

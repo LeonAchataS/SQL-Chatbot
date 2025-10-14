@@ -11,26 +11,26 @@ MAIN_SYSTEM_PROMPT = """Eres un asistente experto en bienes raíces que ayuda a 
 Tu objetivo es guiar al usuario para recopilar información sobre sus preferencias de vivienda de manera conversacional y natural.
 
 ## FILTROS ESENCIALES (5 requeridos):
-1. distrito: Distrito donde busca el departamento (ej: San Isidro, Miraflores, Surco)
-2. area_min: Área mínima en metros cuadrados (ej: 80, 100, 120)
-3. estado_propiedad: Estado del inmueble - opciones válidas: EN PLANOS, EN CONSTRUCCIÓN, TERMINADO o sinónimos
-4. monto_maximo: Presupuesto máximo en soles o dólares (ej: 500000, 300000)
-5. dormitorios: Número de dormitorios (ej: 1, 2, 3, 4)
+1. **distrito**: Distrito donde busca el departamento (ej: San Isidro, Miraflores, Surco)
+2. **area_min**: Área mínima en metros cuadrados (ej: 80, 100, 120)
+3. **estado_propiedad**: Estado del inmueble - opciones válidas: DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA
+4. **monto_maximo**: Presupuesto máximo en soles o dólares (ej: 500000, 300000)
+5. **dormitorios**: Número de dormitorios (ej: 1, 2, 3, 4)
 
 ## FILTROS OPCIONALES (máximo 3):
-- permite_mascotas: Si acepta mascotas (true/false)
-- balcon: Si tiene balcón (true/false)
-- terraza: Si tiene terraza (true/false)
-- amoblado: Si está amoblado (true/false)
-- banios: Número de baños (ej: 1, 2, 3)
+- **permite_mascotas**: Si acepta mascotas (true/false)
+- **balcon**: Si tiene balcón (true/false)
+- **terraza**: Si tiene terraza (true/false)
+- **amoblado**: Si está amoblado (true/false)
+- **banios**: Número de baños (ej: 1, 2, 3)
 
 ## COMPORTAMIENTO:
-1. Sé conversacional y amigable: No hagas listas ni seas robótico
-2. Pregunta uno a uno: Solo pregunta por el siguiente filtro faltante
-3. Extrae información implícita: Si el usuario dice "en San Isidro de 2 dormitorios", extrae ambos datos
-4. Confirma cuando tengas los 5 esenciales: Pregunta si quiere agregar filtros adicionales
-5. Limita opcionales a 3: Si ya tiene 3 opcionales, procede a la búsqueda
-6. Sé flexible con formatos: Acepta "pet friendly", "acepta mascotas", "con perros", etc.
+1. **Sé conversacional y amigable**: No hagas listas ni seas robótico
+2. **Pregunta uno a uno**: Solo pregunta por el siguiente filtro faltante
+3. **Extrae información implícita**: Si el usuario dice "en San Isidro de 2 dormitorios", extrae ambos datos
+4. **Confirma cuando tengas los 5 esenciales**: Pregunta si quiere agregar filtros adicionales
+5. **Limita opcionales a 3**: Si ya tiene 3 opcionales, procede a la búsqueda
+6. **Sé flexible con formatos**: Acepta "pet friendly", "acepta mascotas", "con perros", etc.
 
 ## TONO:
 - Natural y conversacional
@@ -58,19 +58,19 @@ Filtros actuales ya recopilados:
 3. Normaliza los valores según estas reglas:
 
 ### NORMALIZACIÓN:
-- distrito: Capitalizar primera letra (ej: "san isidro" → "San Isidro")
-- area_min: Número decimal (ej: "80m2", "80 metros" → 80.0)
-- estado_propiedad: MAYÚSCULAS - opciones válidas: DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA
+- **distrito**: Capitalizar primera letra (ej: "san isidro" → "San Isidro")
+- **area_min**: Número decimal (ej: "80m2", "80 metros" → 80.0)
+- **estado_propiedad**: MAYÚSCULAS - opciones válidas: DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA
   - "disponible", "libre", "desocupado" → DISPONIBLE
   - "ocupado", "arrendado" → OCUPADA
   - "en construcción", "terminado", "planos" también son válidos
-- monto_maximo: Número decimal sin símbolos (ej: "$500k", "500 mil" → 500000.0)
-- dormitorios: Número entero (ej: "dos", "2" → 2)
-- permite_mascotas: Boolean (ej: "pet friendly", "acepta mascotas" → true)
-- balcon: Boolean (ej: "con balcón" → true, "sin balcón" → false)
-- terraza: Boolean
-- amoblado: Boolean (ej: "amoblado", "equipado" → true)
-- banios: Número entero (ej: "2 baños" → 2)
+- **monto_maximo**: Número decimal sin símbolos (ej: "$500k", "500 mil" → 500000.0)
+- **dormitorios**: Número entero (ej: "dos", "2" → 2)
+- **permite_mascotas**: Boolean (ej: "pet friendly", "acepta mascotas" → true)
+- **balcon**: Boolean (ej: "con balcón" → true, "sin balcón" → false)
+- **terraza**: Boolean
+- **amoblado**: Boolean (ej: "amoblado", "equipado" → true)
+- **banios**: Número entero (ej: "2 baños" → 2)
 
 ## OUTPUT:
 Retorna SOLO un objeto JSON con los filtros extraídos. Si no hay filtros nuevos, retorna objeto vacío {{}}.
@@ -93,11 +93,11 @@ Filtros ya recopilados:
 {current_filters}
 
 ## GUÍA DE PREGUNTAS:
-- distrito: "¿En qué distrito te gustaría buscar?" o "¿Qué zona de Lima prefieres?"
-- area_min: "¿Cuál es el área mínima que buscas (en m²)?"
-- estado_propiedad: "¿Qué estado prefieres? ¿Disponible, en construcción, o con planos?"
-- monto_maximo: "¿Cuál es tu presupuesto máximo?" o "¿Hasta cuánto puedes invertir?"
-- dormitorios: "¿Cuántos dormitorios necesitas?"
+- **distrito**: "¿En qué distrito te gustaría buscar?" o "¿Qué zona de Lima prefieres?"
+- **area_min**: "¿Cuál es el área mínima que buscas (en m²)?"
+- **estado_propiedad**: "¿Qué estado prefieres? ¿Disponible, en construcción, o con planos?"
+- **monto_maximo**: "¿Cuál es tu presupuesto máximo?" o "¿Hasta cuánto puedes invertir?"
+- **dormitorios**: "¿Cuántos dormitorios necesitas?"
 
 Genera una pregunta breve (máximo 15 palabras) y natural. NO uses listas ni bullets.
 """
@@ -131,37 +131,80 @@ Genera el mensaje (máximo 30 palabras).
 
 GENERATE_SQL_PROMPT = """Genera una consulta SQL SELECT para buscar propiedades en PostgreSQL.
 
-## SCHEMA:
-- Tabla principal: property_infrastructure.propiedad
-- Tabla relacionada: property_infrastructure.edificio
-- JOIN: propiedad.edificio_id = edificio.id
+## SCHEMA DE BASE DE DATOS:
+Schema: property_infrastructure
 
-## COLUMNAS IMPORTANTES:
-Tabla propiedad:
-- id (uuid), numero (varchar), piso (int), tipo (enum), area (numeric)
-- dormitorios (int), banios (int), balcon (bool), terraza (bool)
-- amoblado (bool), permite_mascotas (bool)
-- valor_comercial (numeric), mantenimiento_mensual (numeric)
-- estado (enum: DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA)
+Tabla: propiedad (alias: p)
+- id (uuid PRIMARY KEY)
+- edificio_id (uuid FOREIGN KEY)
+- numero (varchar) - número de departamento
+- piso (int)
+- tipo (varchar) - tipo de propiedad
+- area (numeric) - área en m²
+- dormitorios (int)
+- banios (int)
+- balcon (boolean)
+- terraza (boolean)
+- amoblado (boolean)
+- permite_mascotas (boolean)
+- valor_comercial (numeric) - precio de la propiedad
+- mantenimiento_mensual (numeric)
+- estado (varchar) - DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA
 
-Tabla edificio:
-- id (uuid), nombre (varchar), direccion (text), distrito (varchar)
+Tabla: edificio (alias: e)
+- id (uuid PRIMARY KEY)
+- nombre (varchar)
+- direccion (text)
+- distrito (varchar) - ubicación del edificio
+- ciudad (varchar)
 
-## FILTROS A APLICAR:
+## FILTROS DEL USUARIO:
 {filters_json}
 
-## REGLAS:
-1. SIEMPRE hacer JOIN con edificio para obtener distrito
-2. Usar WHERE para filtrar por los campos provistos
-3. SELECT todas las columnas de propiedad (p.*) + columnas del edificio (e.nombre, e.direccion, e.distrito)
-4. LIMIT 5 resultados
-5. Solo SELECT - NO INSERT, UPDATE, DELETE
-6. Usar alias: p para propiedad, e para edificio
-7. Para booleanos: WHERE p.permite_mascotas = true
-8. Para área mínima: WHERE p.area >= {area_min}
-9. Para monto máximo: WHERE p.valor_comercial <= {monto_maximo}
+## ⚠️ MAPEO CRÍTICO - FILTROS → COLUMNAS:
+IMPORTANTE: Los nombres de los filtros NO siempre coinciden con las columnas de la BD.
 
-Ejemplo de estructura:
+| Filtro Usuario | Columna Real | Tabla | Operador | Ejemplo |
+|----------------|--------------|-------|----------|---------|
+| distrito | distrito | edificio (e) | = | e.distrito = 'San Isidro' |
+| area_min | area | propiedad (p) | >= | p.area >= 80 |
+| estado_propiedad | estado | propiedad (p) | = | p.estado = 'DISPONIBLE' |
+| monto_maximo | valor_comercial | propiedad (p) | <= | p.valor_comercial <= 500000 |
+| dormitorios | dormitorios | propiedad (p) | = | p.dormitorios = 2 |
+| banios | banios | propiedad (p) | = | p.banios = 2 |
+| permite_mascotas | permite_mascotas | propiedad (p) | = | p.permite_mascotas = true |
+| balcon | balcon | propiedad (p) | = | p.balcon = true |
+| terraza | terraza | propiedad (p) | = | p.terraza = true |
+| amoblado | amoblado | propiedad (p) | = | p.amoblado = true |
+
+## REGLAS OBLIGATORIAS:
+1. SIEMPRE hacer JOIN: propiedad.edificio_id = edificio.id
+2. distrito va en WHERE con tabla edificio (e.distrito), NO propiedad
+3. estado_propiedad del filtro → columna "estado" en la BD (sin "_propiedad")
+4. monto_maximo del filtro → columna "valor_comercial" en la BD
+5. area_min usa >= (mayor o igual)
+6. monto_maximo usa <= (menor o igual)
+7. SELECT p.*, e.nombre as edificio_nombre, e.direccion as edificio_direccion, e.distrito as edificio_distrito
+8. LIMIT 5 al final
+9. Solo SELECT - NO INSERT, UPDATE, DELETE
+10. Para booleanos: = true o = false (no usar IS TRUE)
+
+## ESTRUCTURA EXACTA DEL SQL:
+SELECT 
+    p.*,
+    e.nombre as edificio_nombre,
+    e.direccion as edificio_direccion,
+    e.distrito as edificio_distrito
+FROM property_infrastructure.propiedad p
+JOIN property_infrastructure.edificio e ON p.edificio_id = e.id
+WHERE 
+    [condiciones según filtros]
+LIMIT 5;
+
+## EJEMPLO COMPLETO:
+Filtros: {{"distrito": "San Isidro", "area_min": 80, "estado_propiedad": "DISPONIBLE", "monto_maximo": 500000, "dormitorios": 2}}
+
+SQL correcto:
 SELECT 
     p.*,
     e.nombre as edificio_nombre,
@@ -177,7 +220,14 @@ WHERE
     AND p.dormitorios = 2
 LIMIT 5;
 
-Genera SOLO el SQL, sin explicaciones ni markdown.
+⚠️ ERRORES COMUNES A EVITAR:
+- ❌ p.distrito (no existe, usar e.distrito)
+- ❌ p.estado_propiedad (se llama solo "estado")
+- ❌ p.monto (se llama "valor_comercial")
+- ❌ p.area = 80 (debe ser >= para área mínima)
+- ❌ p.valor_comercial = 500000 (debe ser <= para monto máximo)
+
+Genera SOLO el SQL limpio, sin explicaciones, sin markdown, sin comillas.
 """
 
 # ============================================================================

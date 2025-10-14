@@ -140,7 +140,8 @@ WHERE
     AND p.estado = 'DISPONIBLE'
     AND p.valor_comercial <= 500000
     AND p.dormitorios = 2
-LIMIT 5;"""
+LIMIT 5;""",
+        "notes": "Nota: distrito va con tabla edificio (e), estado sin '_propiedad', valor_comercial no 'monto'"
     },
     {
         "filters": {
@@ -167,7 +168,36 @@ WHERE
     AND p.dormitorios = 3
     AND p.permite_mascotas = true
     AND p.balcon = true
-LIMIT 5;"""
+LIMIT 5;""",
+        "notes": "Con filtros opcionales booleanos"
+    },
+    {
+        "filters": {
+            "distrito": "Surco",
+            "area_min": 120.0,
+            "estado_propiedad": "EN CONSTRUCCIÓN",
+            "monto_maximo": 800000.0,
+            "dormitorios": 4,
+            "terraza": True,
+            "banios": 3
+        },
+        "sql": """SELECT 
+    p.*,
+    e.nombre as edificio_nombre,
+    e.direccion as edificio_direccion,
+    e.distrito as edificio_distrito
+FROM property_infrastructure.propiedad p
+JOIN property_infrastructure.edificio e ON p.edificio_id = e.id
+WHERE 
+    e.distrito = 'Surco'
+    AND p.area >= 120
+    AND p.estado = 'EN CONSTRUCCIÓN'
+    AND p.valor_comercial <= 800000
+    AND p.dormitorios = 4
+    AND p.terraza = true
+    AND p.banios = 3
+LIMIT 5;""",
+        "notes": "Estado puede ser 'EN CONSTRUCCIÓN', 'PLANOS', etc."
     }
 ]
 

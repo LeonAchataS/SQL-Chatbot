@@ -55,8 +55,13 @@ def route_after_check_completion(state: AgentState) -> Literal["ask_missing_filt
         Nombre del siguiente nodo
     """
     if state.essential_filters_complete:
-        print("➡️ Routing: Filtros completos → ask_additional_filters")
-        return "ask_additional_filters"
+        # Si YA preguntamos por opcionales, ir directo a collect
+        if state.awaiting_additional_filters_confirmation:
+            print("➡️ Routing: Ya preguntamos por opcionales → collect_optional_filters")
+            return "collect_optional_filters"
+        else:
+            print("➡️ Routing: Filtros completos → ask_additional_filters")
+            return "ask_additional_filters"
     else:
         print("➡️ Routing: Filtros incompletos → ask_missing_filter")
         return "ask_missing_filter"
