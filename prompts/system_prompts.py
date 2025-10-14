@@ -13,7 +13,7 @@ Tu objetivo es guiar al usuario para recopilar información sobre sus preferenci
 ## FILTROS ESENCIALES (5 requeridos):
 1. **distrito**: Distrito donde busca el departamento (ej: San Isidro, Miraflores, Surco)
 2. **area_min**: Área mínima en metros cuadrados (ej: 80, 100, 120)
-3. **estado_propiedad**: Estado del inmueble - opciones válidas: DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA
+3. **estado_propiedad**: Estado del inmueble - opciones válidas: PLANOS, CONSTRUCCIÓN, TERMINADO
 4. **monto_maximo**: Presupuesto máximo en soles o dólares (ej: 500000, 300000)
 5. **dormitorios**: Número de dormitorios (ej: 1, 2, 3, 4)
 
@@ -60,10 +60,8 @@ Filtros actuales ya recopilados:
 ### NORMALIZACIÓN:
 - **distrito**: Capitalizar primera letra (ej: "san isidro" → "San Isidro")
 - **area_min**: Número decimal (ej: "80m2", "80 metros" → 80.0)
-- **estado_propiedad**: MAYÚSCULAS - opciones válidas: DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA
-  - "disponible", "libre", "desocupado" → DISPONIBLE
-  - "ocupado", "arrendado" → OCUPADA
-  - "en construcción", "terminado", "planos" también son válidos
+- **estado_propiedad**: MAYÚSCULAS - opciones válidas: PLANOS, CONSTRUCCIÓN, TERMINADO
+  - Sé flexible, acepta variaciones o sinónimos como "en construcción", "construido" (→ CONSTRUCCIÓN)
 - **monto_maximo**: Número decimal sin símbolos (ej: "$500k", "500 mil" → 500000.0)
 - **dormitorios**: Número entero (ej: "dos", "2" → 2)
 - **permite_mascotas**: Boolean (ej: "pet friendly", "acepta mascotas" → true)
@@ -149,7 +147,7 @@ Tabla: propiedad (alias: p)
 - permite_mascotas (boolean)
 - valor_comercial (numeric) - precio de la propiedad
 - mantenimiento_mensual (numeric)
-- estado (varchar) - DISPONIBLE, OCUPADA, MANTENIMIENTO, VENDIDA
+- estado (varchar) - PLANOS, CONSTRUCCIÓN, TERMINADO
 
 Tabla: edificio (alias: e)
 - id (uuid PRIMARY KEY)
