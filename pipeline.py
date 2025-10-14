@@ -296,13 +296,22 @@ async def process_user_message(session_id: str, user_message: str) -> AgentState
     
     # Ejecutar el grafo
     try:
-        result = await property_search_graph.ainvoke(state)
+        result_dict = await property_search_graph.ainvoke(state)
+        
+        # IMPORTANTE: LangGraph retorna un dict, convertir de vuelta a AgentState
+        # Actualizar el state original con los valores del dict resultante
+        for key, value in result_dict.items():
+            if hasattr(state, key):
+                setattr(state, key, value)
+        
+        # Actualizar timestamp
+        state.last_updated = datetime.now()
         
         # Actualizar sesión con el resultado
-        session_manager.update_session(session_id, result)
+        session_manager.update_session(session_id, state)
         
         print(f"✅ Mensaje procesado exitosamente")
-        return result
+        return state
         
     except Exception as e:
         print(f"❌ Error procesando mensaje: {e}")

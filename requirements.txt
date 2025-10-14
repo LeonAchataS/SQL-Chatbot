@@ -1,0 +1,21 @@
+# === Core ===
+python-dotenv==1.0.0
+pydantic==2.10.3
+pydantic-settings==2.6.1
+
+# === OpenAI & LangChain ===
+openai==1.57.2
+langchain==0.3.13
+langchain-openai==0.2.12
+langchain-core==0.3.28
+langgraph==0.2.59
+
+# === Database ===
+asyncpg==0.30.0
+
+# === API ===
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+
+# === Utilities ===
+typing-extensions==4.12.2

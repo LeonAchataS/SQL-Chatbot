@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Inmobiliario</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🏠 Chatbot Inmobiliario</h1>
+            <p>Encuentra tu departamento ideal</p>
+            <div class="session-info">
+                <span id="session-status">Sesión: Iniciando...</span>
+                <button id="reset-btn" class="reset-btn">🔄 Nueva Búsqueda</button>
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <div class="chat-container" id="chat-container">
+            <div class="welcome-message">
+                <div class="bot-icon">🤖</div>
+                <p>¡Hola! Soy tu asistente inmobiliario. Te ayudaré a encontrar el departamento perfecto.</p>
+                <p>Solo dime qué buscas y empecemos.</p>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-container">
+            <input 
+                type="text" 
+                id="message-input" 
+                placeholder="Escribe tu mensaje aquí..."
+                autocomplete="off"
+            >
+            <button id="send-btn" class="send-btn">
+                <span>Enviar</span>
+            </button>
+        </div>
+
+        <!-- Properties Display (Hidden initially) -->
+        <div class="properties-container" id="properties-container" style="display: none;">
+            <div class="properties-header">
+                <h2>🏢 Propiedades Encontradas</h2>
+                <button id="close-properties-btn" class="close-btn">✕</button>
+            </div>
+            <div id="properties-list" class="properties-list">
+                <!-- Properties will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Procesando...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
