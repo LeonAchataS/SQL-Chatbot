@@ -170,7 +170,7 @@ function addMessage(type, content) {
 }
 
 // ============================================================================
-// PROPIEDADES
+// PROPIEDADES - Mostrar como mensaje en el chat
 // ============================================================================
 
 async function loadProperties() {
@@ -191,7 +191,7 @@ async function loadProperties() {
         
         const data = await response.json();
         
-        displayProperties(data);
+        displayPropertiesInChat(data);
         
     } catch (error) {
         console.error('Error loading properties:', error);
@@ -201,32 +201,85 @@ async function loadProperties() {
     }
 }
 
-function displayProperties(data) {
-    propertiesList.innerHTML = '';
-    
+function displayPropertiesInChat(data) {
     if (!data.properties || data.properties.length === 0) {
-        propertiesList.innerHTML = `
-            <div class="no-properties">
-                <p>No se encontraron propiedades con los criterios especificados.</p>
-            </div>
-        `;
-    } else {
-        data.properties.forEach(property => {
-            const card = createPropertyCard(property);
-            propertiesList.appendChild(card);
-        });
+        addMessage('bot', 'No se encontraron propiedades con los criterios especificados. ¿Te gustaría ajustar algún filtro?');
+        return;
     }
     
-    propertiesContainer.style.display = 'flex';
+    // Crear mensaje del bot con las propiedades
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message bot';
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.textContent = '🤖';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    
+    // Texto introductorio
+    const intro = document.createElement('p');
+    intro.textContent = `¡Encontré ${data.count} ${data.count === 1 ? 'propiedad' : 'propiedades'} que ${data.count === 1 ? 'cumple' : 'cumplen'} con tus criterios!`;
+    intro.style.marginBottom = '12px';
+    contentDiv.appendChild(intro);
+    
+    // Contenedor de properties con carousel
+    const propertiesContainer = document.createElement('div');
+    propertiesContainer.className = 'properties-message';
+    
+    const carousel = document.createElement('div');
+    carousel.className = 'properties-carousel';
+    
+    // Crear cards para cada propiedad
+    data.properties.forEach(property => {
+        const card = createPropertyCardInline(property);
+        carousel.appendChild(card);
+    });
+    
+    propertiesContainer.appendChild(carousel);
+    
+    // Indicador de deslizamiento (si hay más de 1)
+    if (data.count > 1) {
+        const swipeHint = document.createElement('div');
+        swipeHint.className = 'properties-count';
+        swipeHint.textContent = '← Desliza para ver más →';
+        propertiesContainer.appendChild(swipeHint);
+    }
+    
+    contentDiv.appendChild(propertiesContainer);
+    
+    // Timestamp
+    const time = document.createElement('div');
+    time.className = 'message-time';
+    time.textContent = new Date().toLocaleTimeString('es-ES', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+    });
+    contentDiv.appendChild(time);
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(contentDiv);
+    
+    // Remover mensaje de bienvenida si existe
+    const welcomeMsg = chatContainer.querySelector('.welcome-message');
+    if (welcomeMsg) {
+        welcomeMsg.remove();
+    }
+    
+    chatContainer.appendChild(messageDiv);
+    
+    // Scroll al final
+    chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-function createPropertyCard(property) {
+function createPropertyCardInline(property) {
     const card = document.createElement('div');
     card.className = 'property-card';
     
     // Formatear precio
     const price = property.valor_comercial 
-        ? `S/ ${property.valor_comercial.toLocaleString('es-PE')}` 
+        ? `S/ ${property.valor_comercial.toLocaleString('es-PE', {maximumFractionDigits: 0})}` 
         : 'Precio no disponible';
     
     // Features activos
@@ -237,38 +290,44 @@ function createPropertyCard(property) {
     if (property.amoblado) features.push('🛋️ Amoblado');
     
     card.innerHTML = `
-        <div class="property-header">
-            <div>
-                <div class="property-title">${property.tipo} ${property.numero}</div>
-                <small style="color: var(--text-light);">Piso ${property.piso || 'N/A'}</small>
+        <div class="property-card-content">
+            <div class="property-card-header">
+                <div>
+                    <div class="property-card-title">${property.tipo} ${property.numero}</div>
+                    <div class="property-card-subtitle">Piso ${property.piso || 'N/A'}</div>
+                </div>
+                <div class="property-card-price">${price}</div>
             </div>
-            <div class="property-price">${price}</div>
-        </div>
-        
-        <div class="property-details">
-            <div class="detail-item">
-                📐 <strong>${property.area || 'N/A'} m²</strong>
+            
+            <div class="property-card-details">
+                <div class="property-detail-item">
+                    📐 <strong>${property.area || 'N/A'} m²</strong>
+                </div>
+                <div class="property-detail-item">
+                    🛏️ <strong>${property.dormitorios || 0} dorms</strong>
+                </div>
+                <div class="property-detail-item">
+                    🚿 <strong>${property.banios || 0} baños</strong>
+                </div>
+                <div class="property-detail-item">
+                    📊 <strong>${property.estado}</strong>
+                </div>
             </div>
-            <div class="detail-item">
-                🛏️ <strong>${property.dormitorios || 0} dormitorios</strong>
+            
+            ${features.length > 0 ? `
+                <div class="property-card-features">
+                    ${features.map(f => `<span class="property-feature-badge">${f}</span>`).join('')}
+                </div>
+            ` : ''}
+            
+            <div class="property-card-location">
+                📍 <strong>${property.edificio_nombre || 'Edificio'}</strong><br>
+                ${property.edificio_direccion || ''}, ${property.edificio_distrito || ''}
             </div>
-            <div class="detail-item">
-                🚿 <strong>${property.banios || 0} baños</strong>
-            </div>
-            <div class="detail-item">
-                📊 <strong>${property.estado}</strong>
-            </div>
-        </div>
-        
-        ${features.length > 0 ? `
-            <div class="property-features">
-                ${features.map(f => `<span class="feature-badge">${f}</span>`).join('')}
-            </div>
-        ` : ''}
-        
-        <div class="property-location">
-            📍 <strong>${property.edificio_nombre || 'Edificio'}</strong><br>
-            ${property.edificio_direccion || ''}, ${property.edificio_distrito || ''}
+            
+            <a href="#proyecto-${property.id}" class="property-card-link" onclick="alert('Link al proyecto (placeholder)'); return false;">
+                Ver detalles del proyecto →
+            </a>
         </div>
     `;
     
@@ -276,7 +335,8 @@ function createPropertyCard(property) {
 }
 
 function closeProperties() {
-    propertiesContainer.style.display = 'none';
+    // Ya no se usa porque las propiedades están en el chat
+    // Mantener por compatibilidad
 }
 
 // ============================================================================
