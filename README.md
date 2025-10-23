@@ -242,3 +242,8 @@ CMD ["python", "main.py"]
 **Frontend no conecta**
 - Verificar CORS en main.py
 - Cambiar `API_URL` en script.js si backend no está en localhost:8000
+
+
+Autor:
+
+León Achata 
